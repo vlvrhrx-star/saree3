@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>سريع Max | تحميل فيديو بدون حقوق (تيك توك، انستا، يوتيوب)</title>
+    <meta name="description" content="أفضل موقع مجاني لتحميل الفيديوهات بجودة عالية وبدون علامة مائية. يدعم تيك توك، انستقرام ريلز، يوتيوب، فيسبوك، تويتر. سريع، آمن، ومجاني 100%.">
+    <meta name="keywords" content="تحميل فيديو تيك توك بدون حقوق, تنزيل ريلز انستقرام, تحميل من اليوتيوب, تحميل فيديو فيسبوك, تنزيل حالات واتساب, سناب شات, سريع Max, تحميل MP4">
+    <meta name="author" content="Saree3 Max">
+    
+    <meta property="og:title" content="سريع Max - حمل أي فيديو بضغطة زر">
+    <meta property="og:description" content="أداة التحميل الشاملة: تيك توك بدون حقوق، انستا، يوتيوب بجودة عالية. جربه الآن!">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/7229/7229641.png">
+    <meta property="og:url" content="https://saree3-max.github.io">
+    <meta property="og:type" content="website">
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #a29bfe;
+            --accent: #00cec9;
+            --dark: #0f0c29;
+            --gradient: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+        }
+
+        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background: var(--gradient);
+            color: white; margin: 0; min-height: 100vh;
+            display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+            padding-bottom: 50px; overflow-x: hidden;
+        }
+
+        /* الخلفية المتحركة */
+        .bg-shapes {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden;
+        }
+        .shape {
+            position: absolute; filter: blur(80px); opacity: 0.6; animation: float 10s infinite alternate;
+        }
+        .s1 { top: -10%; left: -10%; width: 300px; height: 300px; background: #6c5ce7; }
+        .s2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #00cec9; animation-delay: -5s; }
+
+        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(30px, 50px); } }
+
+        /* العنوان الرئيسي */
+        .hero {
+            text-align: center; margin-top: 60px; padding: 20px; animation: fadeInDown 1s ease;
+        }
+        .logo {
+            font-size: 3.5rem; font-weight: 900; 
+            background: linear-gradient(to right, #fff, #a29bfe); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 5px; letter-spacing: -2px;
+        }
+        .tagline { font-size: 1.1rem; opacity: 0.8; margin-top: 0; font-weight: 300; }
+
+        /* حاوية البحث الزجاجية */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px; padding: 25px; width: 90%; max-width: 600px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            margin-top: 30px; animation: fadeInUp 1s ease;
+        }
+
+        .input-group {
+            position: relative; width: 100%; display: flex; gap: 10px;
+            background: rgba(0, 0, 0, 0.3); border-radius: 50px; padding: 5px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        input {
+            flex: 1; background: transparent; border: none; color: white;
+            padding: 15px 20px; font-size: 1.1rem; outline: none;
+        }
+        input::placeholder { color: rgba(255,255,255,0.5); font-size: 0.9rem; }
+
+        .btn-action {
+            border: none; border-radius: 50px; padding: 12px 25px;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .btn-paste { background: rgba(255,255,255,0.1); color: white; }
+        .btn-go {
+            background: linear-gradient(90deg, #6c5ce7, #a29bfe); color: white;
+            box-shadow: 0 0 15px rgba(108, 92, 231, 0.4);
+        }
+        .btn-go:active { transform: scale(0.95); }
+
+        /* منطقة النتائج */
+        .result-area { width: 90%; max-width: 600px; margin-top: 20px; display: none; }
+        
+        .video-card {
+            background: rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 15px;
+            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: space-between;
+            animation: slideIn 0.5s ease;
+        }
+
+        .video-info { display: flex; flex-direction: column; gap: 5px; }
+        .video-badge {
+            font-size: 0.8rem; background: #00b894; color: white; 
+            padding: 3px 10px; border-radius: 10px; width: fit-content;
+        }
+        .video-title { font-weight: bold; font-size: 0.9rem; color: #dfe6e9; }
+
+        .dl-btn {
+            background: white; color: var(--dark); text-decoration: none;
+            padding: 10px 20px; border-radius: 15px; font-weight: bold; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 5px; transition: 0.3s;
+        }
+        .dl-btn:hover { background: #00cec9; color: white; }
+
+        /* التحميل والأخطاء */
+        .loader {
+            width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #00cec9; border-radius: 50%; 
+            animation: spin 1s linear infinite; margin: 20px auto; display: none;
+        }
+        .error-msg {
+            background: rgba(214, 48, 49, 0.2); color: #ff7675; padding: 10px;
+            border-radius: 10px; text-align: center; margin-top: 15px; display: none; border: 1px solid #d63031;
+        }
+
+        /* أيقونات المواقع المدعومة */
+        .supported-icons {
+            display: flex; justify-content: center; gap: 20px; margin-top: 40px; opacity: 0.7;
+        }
+        .supported-icons i { font-size: 1.5rem; transition: 0.3s; }
+        .supported-icons i:hover { transform: scale(1.2); color: #fff; opacity: 1; }
+
+        /* الكلمات المفتاحية (مخفية بصرياً لكن موجودة لمحركات البحث) */
+        .seo-text { font-size: 0.7rem; color: rgba(255,255,255,0.2); text-align: center; margin-top: 50px; line-height: 1.5; }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="bg-shapes">
+        <div class="shape s1"></div>
+        <div class="shape s2"></div>
+    </div>
+
+    <div class="hero">
+        <div class="logo">سريع Max <i class="fas fa-bolt" style="font-size:2rem; color:#f1c40f;"></i></div>
+        <p class="tagline">محرك التحميل الشامل - جودة أصلية بدون علامة مائية</p>
+    </div>
+
+    <div class="glass-card">
+        <div class="input-group">
+            <button class="btn-action btn-paste" onclick="paste()" title="لصق الرابط"><i class="fas fa-paste"></i></button>
+            <input type="text" id="url" placeholder="ضع رابط الفيديو هنا (تيك توك، انستا، يوتيوب...)">
+        </div>
+        <button class="btn-action btn-go" onclick="startHybridEngine()" style="width:100%; margin-top:15px; padding: 15px;">
+            <i class="fas fa-download"></i> تحميل الفيديو الآن
+        </button>
+
+        <div class="loader" id="loader"></div>
+        <div class="error-msg" id="errorMsg"></div>
+    </div>
+
+    <div class="result-area" id="resultArea">
+        </div>
+
+    <div class="supported-icons">
+        <i class="fab fa-tiktok" style="color: #fff;"></i>
+        <i class="fab fa-instagram" style="color: #e1306c;"></i>
+        <i class="fab fa-youtube" style="color: #ff0000;"></i>
+        <i class="fab fa-facebook" style="color: #1877f2;"></i>
+        <i class="fab fa-twitter" style="color: #1da1f2;"></i>
+    </div>
+
+    <div class="seo-text">
+        <p>يدعم التحميل من جميع المنصات: تيك توك بدون حقوق مائية، ريلز انستقرام بجودة عالية، فيديوهات يوتيوب، شورتس، فيسبوك، تويتر X.</p>
+        <p>تحميل سريع وآمن 2025 - Saree3 Max Downloader</p>
+    </div>
+
+    <script>
+        const RAPID_KEY = '93247df140mshd2aea963379b373p191d29jsnefecb1c82e24';
+
+        async function paste() {
+            try {
+                const text = await navigator.clipboard.readText();
+                document.getElementById('url').value = text;
+            } catch (e) {
+                document.getElementById('url').focus();
+                alert('يرجى لصق الرابط يدوياً');
+            }
+        }
+
+        async function startHybridEngine() {
+            const url = document.getElementById('url').value.trim();
+            const loader = document.getElementById('loader');
+            const errorMsg = document.getElementById('errorMsg');
+            const resultArea = document.getElementById('resultArea');
+
+            if(!url) return;
+
+            // إعادة تعيين الواجهة
+            loader.style.display = 'block';
+            errorMsg.style.display = 'none';
+            resultArea.style.display = 'none';
+            resultArea.innerHTML = '';
+
+            try {
+                // محاولة 1: تيك توك خاص (الأسرع والأفضل للجودة)
+                if (url.includes('tiktok.com')) {
+                    await fetchTikTok(url);
+                    return;
+                }
+
+                // محاولة 2: المحرك الشامل (Cobalt)
+                try {
+                    await fetchCobalt(url);
+                } catch (e) {
+                    // محاولة 3: RapidAPI كاحتياطي أخير
+                    console.log("Cobalt failed, trying RapidAPI...");
+                    await fetchRapidAPI(url);
+                }
+
+            } catch (err) {
+                loader.style.display = 'none';
+                errorMsg.innerText = "❌ عذراً، لم نتمكن من جلب الفيديو. تأكد أن الرابط عام وصحيح.";
+                errorMsg.style.display = 'block';
+            }
+        }
+
+        async function fetchTikTok(url) {
+            const apiUrl = `https://www.tikwm.com/api/?url=${url}`;
+            // استخدام بروكسي لتجاوز الحظر في بعض الدول
+            const proxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(apiUrl)}`;
+            
+            const res = await fetch(proxy);
+            const data = await res.json();
+            
+            if(data.code === 0) {
+                addCard('TikTok Original', data.data.hdplay, 'فيديو بجودة أصلية (بدون علامة)');
+                if(data.data.music) addCard('MP3 Audio', data.data.music, 'تحميل الصوت فقط');
+                finishLoading();
+            } else {
+                throw new Error("TikTok API Failed");
+            }
+        }
+
+        async function fetchCobalt(url) {
+            const res = await fetch('https://api.cobalt.tools/api/json', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url: url, vCodec: 'h264', vQuality: 'max', isAudioOnly: false })
+            });
+            
+            const data = await res.json();
+            if(data.status === 'error') throw new Error("Cobalt Error");
+
+            if (data.url) {
+                addCard('Download Ready', data.url, 'تحميل الفيديو المباشر');
+            } else if (data.picker) {
+                data.picker.forEach(item => addCard('Media File', item.url, `تحميل ملف (${item.type})`));
+            }
+            finishLoading();
+        }
+
+        async function fetchRapidAPI(url) {
+            const res = await fetch('https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json',
+                    'X-RapidAPI-Key': RAPID_KEY,
+                    'X-RapidAPI-Host': 'social-download-all-in-one.p.rapidapi.com'
+                },
+                body: JSON.stringify({ url: url })
+            });
+            
+            const data = await res.json();
+            if(!data.medias || data.medias.length === 0) throw new Error("RapidAPI No Data");
+
+            data.medias.forEach(m => {
+                if(m.extension === 'mp4') {
+                    addCard(m.quality, m.url, `جودة ${m.quality} (${m.size || ''})`);
+                }
+            });
+            finishLoading();
+        }
+
+        function addCard(badgeText, link, titleText) {
+            const card = document.createElement('div');
+            card.className = 'video-card';
+            card.innerHTML = `
+                <div class="video-info">
+                    <span class="video-badge">${badgeText}</span>
+                    <span class="video-title">${titleText}</span>
+                </div>
+                <a href="${link}" target="_blank" class="dl-btn"><i class="fas fa-download"></i> تحميل</a>
+            `;
+            document.getElementById('resultArea').appendChild(card);
+        }
+
+        function finishLoading() {
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('resultArea').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
