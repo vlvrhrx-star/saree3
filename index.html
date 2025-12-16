@@ -10,7 +10,7 @@
     <style>
         :root { --primary: #0984e3; --secondary: #74b9ff; --bg: #dfe6e9; }
         * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 50px; }
         
         .header {
             width: 100%; padding: 40px 20px 80px; background: linear-gradient(135deg, var(--primary), var(--secondary));
@@ -25,36 +25,33 @@
         }
         input { flex: 1; border: none; outline: none; padding: 10px 20px; font-size: 1rem; }
         button {
-            border: none; padding: 12px 30px; border-radius: 30px; cursor: pointer; font-weight: bold;
-            transition: 0.3s;
+            border: none; padding: 12px 30px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s;
         }
         .btn-paste { background: #f1f2f6; color: #333; }
         .btn-dl { background: var(--primary); color: white; }
-        .btn-dl:hover { background: #0056b3; }
 
         .result-card {
             background: white; width: 90%; max-width: 600px; padding: 20px; border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: none; margin-top: -20px; margin-bottom: 50px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: none; margin-top: -20px;
         }
-        .video-info { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .thumb { width: 100px; height: 100px; border-radius: 15px; object-fit: cover; background: #eee; }
+        .video-info { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
+        .thumb { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; }
         
-        .links { display: flex; flex-direction: column; gap: 10px; }
-        .link-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px; background: #f8f9fa; border-radius: 10px; border: 1px solid #eee;
-        }
+        .links { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        
         .dl-btn {
-            text-decoration: none; background: #00b894; color: white; padding: 8px 20px;
-            border-radius: 20px; font-size: 0.9rem; display: flex; align-items: center; gap: 5px;
+            text-decoration: none; background: #00b894; color: white; padding: 15px;
+            border-radius: 15px; font-size: 1rem; font-weight: bold; text-align: center;
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+            box-shadow: 0 4px 10px rgba(0, 184, 148, 0.2);
         }
+        .dl-btn.audio { background: #fdcb6e; color: #d35400; }
         
         .loader { display: none; margin: 20px auto; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         
         .status-badge {
-            display: inline-block; padding: 5px 15px; border-radius: 20px; background: #ffeaa7; color: #d35400;
-            font-size: 0.8rem; margin-top: 5px; font-weight: bold;
+            background: #ffeaa7; color: #d35400; padding: 4px 12px; border-radius: 10px; font-size: 0.8rem;
         }
     </style>
 </head>
@@ -62,24 +59,23 @@
 
     <div class="header">
         <div class="logo"><i class="fas fa-search"></i> الصياد | Hunter</div>
-        <p>ضع رابط أي صفحة في الإنترنت وسأستخرج الفيديو منها</p>
+        <p>ضع رابط أي صفحة وسأجلب الفيديو لك</p>
     </div>
 
     <div class="search-box">
         <button class="btn-paste" onclick="paste()">لصق</button>
-        <input type="text" id="url" placeholder="مثال: رابط مقال، موقع إخباري...">
+        <input type="text" id="url" placeholder="الرابط هنا...">
         <button class="btn-dl" onclick="startHunter()">بحث</button>
     </div>
 
     <div class="loader" id="loader"></div>
-    <div id="statusMsg" style="text-align:center; color:#636e72; margin-top:10px; display:none;"></div>
-    <div id="error" style="color:#d63031; display:none; margin-top:20px; text-align:center;"></div>
+    <div id="error" style="color:#d63031; display:none; margin-top:20px; text-align:center; font-weight:bold;"></div>
 
     <div class="result-card" id="result">
         <div class="video-info">
             <img id="thumb" class="thumb" src="">
-            <div class="details" style="flex:1">
-                <h3 id="title" style="margin:0 0 10px 0; font-size:1rem;"></h3>
+            <div style="flex:1">
+                <h4 id="title" style="margin:0 0 5px 0; font-size:0.9rem; line-height:1.4;"></h4>
                 <span id="sourceBadge" class="status-badge"></span>
             </div>
         </div>
@@ -87,7 +83,6 @@
     </div>
 
     <script>
-        // مفتاحك (للمواقع المعروفة)
         const RAPID_KEY = '93247df140mshd2aea963379b373p191d29jsnefecb1c82e24';
 
         async function paste() {
@@ -100,165 +95,112 @@
         async function startHunter() {
             const url = document.getElementById('url').value.trim();
             const loader = document.getElementById('loader');
-            const statusMsg = document.getElementById('statusMsg');
             const result = document.getElementById('result');
             const error = document.getElementById('error');
 
             if(!url) return;
 
-            // إعادة تعيين الواجهة
             loader.style.display = 'block';
-            statusMsg.style.display = 'block';
             result.style.display = 'none';
             error.style.display = 'none';
 
             try {
-                // 1. فحص هل هو تيك توك؟ (الأكثر طلباً)
                 if (url.includes('tiktok.com')) {
-                    statusMsg.innerText = "جاري الاتصال بخوادم تيك توك...";
                     await fetchTikTok(url);
-                    return;
+                } else {
+                    // للمواقع الأخرى
+                    await fetchGenericSite(url);
                 }
-
-                // 2. محاولة استخدام API المواقع المعروفة (يوتيوب/انستا/فيسبوك)
-                try {
-                    statusMsg.innerText = "جاري البحث في المصادر الرسمية...";
-                    await fetchRapidAPI(url);
-                    return; // إذا نجح توقف
-                } catch (e) {
-                    console.log("الرابط ليس من المواقع المدعومة رسمياً، تفعيل الصياد العام...");
-                }
-
-                // 3. تفعيل "الصياد العام" (لأي موقع إنترنت آخر)
-                statusMsg.innerText = "جاري مسح الصفحة واستخراج الروابط المخفية...";
-                await fetchGenericSite(url);
-
             } catch (err) {
                 loader.style.display = 'none';
-                statusMsg.style.display = 'none';
-                error.innerText = "عذراً، لم أتمكن من استخراج فيديو مباشر. قد يكون الموقع مشفراً أو يحتاج تسجيل دخول.";
+                error.innerText = "❌ لم يتم العثور على فيديو قابل للتحميل.";
                 error.style.display = 'block';
             }
         }
 
-        // --- دالة تيك توك ---
         async function fetchTikTok(url) {
+            // نستخدم AllOrigins كجسر للاتصال
             const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.tikwm.com/api/?url=' + url)}`;
             const res = await fetch(apiUrl);
             const data = await res.json();
+            
             if(data.code === 0) {
+                // تجميع كل الروابط المتاحة لضمان ظهور زر واحد على الأقل
+                let links = [];
+                
+                // 1. رابط HD
+                if(data.data.hdplay) links.push({ url: data.data.hdplay, text: '📹 تحميل فيديو (HD)', type: 'video' });
+                // 2. رابط عادي (احتياطي)
+                else if(data.data.play) links.push({ url: data.data.play, text: '📹 تحميل فيديو (عادي)', type: 'video' });
+                // 3. رابط صوت
+                if(data.data.music) links.push({ url: data.data.music, text: '🎵 تحميل صوت (MP3)', type: 'audio' });
+
                 showData({
-                    title: data.data.title,
+                    title: data.data.title || 'فيديو تيك توك',
                     thumb: data.data.cover,
                     source: 'TikTok Server',
-                    links: [{ url: data.data.hdplay, text: 'تحميل اصلي (HD)' }]
+                    links: links
                 });
-            } else throw new Error();
+            } else {
+                throw new Error("Failed");
+            }
         }
 
-        // --- دالة المواقع المعروفة ---
-        async function fetchRapidAPI(url) {
-            const res = await fetch('https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json',
-                    'X-RapidAPI-Key': RAPID_KEY,
-                    'X-RapidAPI-Host': 'social-download-all-in-one.p.rapidapi.com'
-                },
-                body: JSON.stringify({ url: url })
-            });
-            const data = await res.json();
-            if(!data.medias || data.medias.length === 0) throw new Error();
-            
-            showData({
-                title: data.title || 'فيديو سوشيال',
-                thumb: data.thumbnail,
-                source: data.source,
-                links: data.medias.map(m => ({ url: m.url, text: `جودة ${m.quality || 'عادية'}` }))
-            });
-        }
-
-        // --- دالة الصياد العام (General Scraper) ---
         async function fetchGenericSite(targetUrl) {
-            // نستخدم وكيل AllOrigins لقراءة كود الموقع دون مشاكل الحماية
+            // الصياد العام للمواقع الأخرى
             const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
             const response = await fetch(proxyUrl);
             const data = await response.json();
             
-            if(!data.contents) throw new Error("لا يمكن قراءة الصفحة");
+            if(!data.contents) throw new Error();
 
             const parser = new DOMParser();
             const doc = parser.parseFromString(data.contents, 'text/html');
             const foundLinks = new Set();
 
-            // أ. البحث في الميتا تاج (أقوى طريقة للمواقع الحديثة)
-            const metaTags = [
-                'meta[property="og:video"]',
-                'meta[property="og:video:secure_url"]',
-                'meta[property="og:video:url"]',
-                'meta[property="twitter:player:stream"]',
-                'meta[name="twitter:player:stream"]'
-            ];
-            
-            metaTags.forEach(selector => {
-                const tag = doc.querySelector(selector);
-                if(tag && tag.content) foundLinks.add(tag.content);
-            });
-
-            // ب. البحث عن وسم الفيديو المباشر <video>
-            const videos = doc.querySelectorAll('video, source');
-            videos.forEach(v => {
-                if(v.src && v.src.startsWith('http')) foundLinks.add(v.src);
-            });
-
-            // ج. البحث في النصوص عن أي رابط ينتهي بـ .mp4
+            // البحث عن ملفات MP4 في الكود
             const regex = /(https?:\/\/[^\s"']+\.mp4)/g;
             const matches = data.contents.match(regex);
             if(matches) matches.forEach(m => foundLinks.add(m));
 
+            // البحث في وسوم الفيديو
+            doc.querySelectorAll('video, source').forEach(v => {
+                if(v.src && v.src.startsWith('http')) foundLinks.add(v.src);
+            });
+
             if(foundLinks.size > 0) {
-                // تحويل النتائج لمصفوفة وعرضها
                 const finalLinks = Array.from(foundLinks).map((link, i) => ({
-                    url: link,
-                    text: `رابط مستخرج ${i + 1} (ملف مباشر)`
+                    url: link, text: `📥 تحميل الملف ${i+1}`, type: 'video'
                 }));
                 
-                // محاولة جلب عنوان وصورة
-                const pageTitle = doc.querySelector('title')?.innerText || 'فيديو من موقع عام';
-                const pageImg = doc.querySelector('meta[property="og:image"]')?.content || 'https://via.placeholder.com/150';
-
                 showData({
-                    title: pageTitle,
-                    thumb: pageImg,
-                    source: 'Web Scraper (عام)',
+                    title: doc.querySelector('title')?.innerText || 'فيديو مكتشف',
+                    thumb: 'https://cdn-icons-png.flaticon.com/512/2991/2991195.png',
+                    source: 'Web Scraper',
                     links: finalLinks
                 });
             } else {
-                throw new Error("لم يتم العثور على فيديو");
+                throw new Error();
             }
         }
 
         function showData(data) {
             document.getElementById('loader').style.display = 'none';
-            document.getElementById('statusMsg').style.display = 'none';
             document.getElementById('result').style.display = 'block';
 
             document.getElementById('title').innerText = data.title;
-            document.getElementById('thumb').src = data.thumb || 'https://via.placeholder.com/150';
+            document.getElementById('thumb').src = data.thumb;
             document.getElementById('sourceBadge').innerText = data.source;
 
             const linksDiv = document.getElementById('links');
             linksDiv.innerHTML = '';
 
             data.links.forEach(link => {
-                if(!link.url) return;
+                const cls = link.type === 'audio' ? 'dl-btn audio' : 'dl-btn';
                 linksDiv.innerHTML += `
-                    <div class="link-item">
-                        <strong>${link.text}</strong>
-                        <a href="${link.url}" target="_blank" class="dl-btn">
-                            <i class="fas fa-download"></i> تحميل
-                        </a>
-                    </div>
+                    <a href="${link.url}" target="_blank" class="${cls}">
+                        ${link.text}
+                    </a>
                 `;
             });
         }
