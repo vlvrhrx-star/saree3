@@ -3,143 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سريع Max | تحميل مضمون</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <title>سريع Max | مشاهدة وتحميل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         body {
-            background: linear-gradient(135deg, #1e272e, #000000);
-            color: white; font-family: 'Cairo', sans-serif;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px;
+            background: #111; color: white; font-family: 'Tajawal', sans-serif;
+            display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0;
         }
-        .container {
-            width: 100%; max-width: 600px; text-align: center;
-            background: rgba(255, 255, 255, 0.05); padding: 30px;
-            border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);
-            margin-top: 50px;
+        .app-box {
+            width: 100%; max-width: 500px; text-align: center;
         }
-        h1 { margin-bottom: 5px; color: #00d2d3; }
+        h1 { margin-bottom: 20px; background: linear-gradient(45deg, #FF3CAC, #784BA0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .input-group {
+            background: #222; padding: 5px; border-radius: 50px; display: flex;
+            border: 1px solid #444; margin-bottom: 20px;
+        }
         input {
-            width: 100%; padding: 15px; border-radius: 50px; border: none;
-            margin: 20px 0; font-size: 1rem; text-align: center; outline: none;
+            flex: 1; background: transparent; border: none; color: white; padding: 15px;
+            font-size: 1rem; text-align: center; outline: none;
         }
-        .btn-go {
-            width: 100%; padding: 15px; border-radius: 50px; border: none;
-            background: #0984e3; color: white; font-size: 1.1rem; font-weight: bold;
-            cursor: pointer; transition: 0.3s;
-        }
-        .btn-go:hover { background: #74b9ff; }
-        
-        .result { margin-top: 20px; display: none; }
-        .video-box {
-            background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px;
-            margin-bottom: 15px; border: 1px solid #555;
-        }
-        .dl-btn {
-            display: block; text-decoration: none; background: #00b894; color: white;
-            padding: 10px; border-radius: 10px; margin-top: 10px;
-        }
-        
-        .error-box {
-            color: #ff7675; background: rgba(214, 48, 49, 0.2);
-            padding: 10px; border-radius: 10px; display: none; margin-top: 15px;
+        button {
+            background: white; color: black; border: none; padding: 0 25px;
+            border-radius: 50px; font-weight: bold; cursor: pointer;
         }
 
-        /* زر الطوارئ */
-        .fallback-btn {
-            display: none; background: #e17055; color: white; text-decoration: none;
-            padding: 12px; border-radius: 50px; margin-top: 10px; font-weight: bold;
+        /* منطقة الفيديو */
+        .video-wrapper {
+            display: none; background: #222; padding: 15px; border-radius: 20px;
+            border: 1px solid #333; animation: fadeIn 0.5s;
         }
+        video {
+            width: 100%; border-radius: 15px; margin-bottom: 15px; background: black;
+        }
+        .btn-save {
+            display: block; background: #00b894; color: white; text-decoration: none;
+            padding: 15px; border-radius: 12px; font-weight: bold; font-size: 1.1rem;
+        }
+        .btn-save:hover { opacity: 0.9; }
+
+        .loader { display: none; color: #784BA0; font-size: 2rem; margin-top: 20px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>سريع Max 🚀</h1>
-        <p>نظام التحميل المباشر V6</p>
+    <div class="app-box">
+        <h1>سريع Max <i class="fas fa-bolt"></i></h1>
 
-        <input type="text" id="url" placeholder="ضع رابط الفيديو (تيك توك، ريلز...)">
-        <button class="btn-go" onclick="processVideo()">تحميل الفيديو</button>
-        
-        <div id="loader" style="display:none; margin-top:20px;">
-            <i class="fas fa-spinner fa-spin fa-2x"></i><br>جاري المعالجة...
+        <div class="input-group">
+            <input type="text" id="url" placeholder="الصق رابط الفيديو هنا...">
+            <button onclick="fetchVideo()">جلب</button>
         </div>
 
-        <div class="error-box" id="errorMsg"></div>
-        <a id="fallbackBtn" class="fallback-btn" target="_blank"><i class="fas fa-external-link-alt"></i> فشل الاتصال المباشر - اضغط للتحميل من السيرفر البديل</a>
+        <div class="loader" id="loader"><i class="fas fa-circle-notch fa-spin"></i></div>
 
-        <div class="result" id="resultArea"></div>
+        <div class="video-wrapper" id="playerBox">
+            <video id="myVideo" controls playsinline></video>
+            <a id="dlBtn" href="#" target="_blank" class="btn-save">
+                <i class="fas fa-download"></i> اضغط هنا للحفظ
+            </a>
+        </div>
+        
+        <p id="errMsg" style="color:#ff7675; display:none; margin-top:15px;">خطأ: تأكد أن الرابط صحيح وعام.</p>
     </div>
 
     <script>
-        async function processVideo() {
+        async function fetchVideo() {
             const url = document.getElementById('url').value.trim();
             const loader = document.getElementById('loader');
-            const result = document.getElementById('resultArea');
-            const errorMsg = document.getElementById('errorMsg');
-            const fallback = document.getElementById('fallbackBtn');
+            const playerBox = document.getElementById('playerBox');
+            const vidPlayer = document.getElementById('myVideo');
+            const dlBtn = document.getElementById('dlBtn');
+            const errMsg = document.getElementById('errMsg');
 
-            if (!url) return alert('يرجى وضع رابط!');
+            if(!url) return;
 
-            // إعادة تعيين الشاشة
+            // إعادة تعيين
             loader.style.display = 'block';
-            result.style.display = 'none';
-            errorMsg.style.display = 'none';
-            fallback.style.display = 'none';
-            result.innerHTML = '';
+            playerBox.style.display = 'none';
+            errMsg.style.display = 'none';
 
             try {
-                // 1. تجربة تيك توك (الأكثر طلباً)
-                if (url.includes('tiktok.com')) {
-                    await downloadTikTok(url);
+                // استخدام API بسيط جداً ومباشر
+                let apiUrl = "";
+                
+                // تيك توك
+                if(url.includes('tiktok.com')) {
+                   const res = await fetch(`https://www.tikwm.com/api/?url=${url}`);
+                   const data = await res.json();
+                   if(data.code === 0) {
+                       showPlayer(data.data.play);
+                   } else { throw new Error(); }
                 } 
-                // 2. باقي المواقع (تحويل ذكي)
+                // باقي المواقع (محرك Cobalt)
                 else {
-                    // GitHub Pages يمنع الاتصال المباشر بـ YouTube/Insta API
-                    // لذلك سنرسل المستخدم للسيرفر البديل فوراً لضمان التحميل
-                    throw new Error("تطلب المنصة سيرفر خارجي");
+                    const res = await fetch('https://api.cobalt.tools/api/json', {
+                        method: 'POST',
+                        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url: url })
+                    });
+                    const data = await res.json();
+                    if(data.url) showPlayer(data.url);
+                    else if(data.picker) showPlayer(data.picker[0].url);
+                    else throw new Error();
                 }
 
-            } catch (err) {
+            } catch (e) {
                 loader.style.display = 'none';
-                errorMsg.innerText = "⚠️ لم ينجح التحميل المباشر (قيود المتصفح).";
-                errorMsg.style.display = 'block';
-                
-                // تفعيل الخطة البديلة (زر الطوارئ)
-                fallback.href = `https://publer.io/tools/media-downloader?url=${encodeURIComponent(url)}`;
-                fallback.innerHTML = `<i class="fas fa-save"></i> اضغط هنا لتحميل الفيديو (سيرفر 2)`;
-                fallback.style.display = 'block';
+                errMsg.style.display = 'block';
             }
         }
 
-        async function downloadTikTok(url) {
-            // استخدام بروكسي CorsProxy لكسر الحماية
-            const apiUrl = `https://www.tikwm.com/api/?url=${url}`;
-            const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(apiUrl)}`;
+        function showPlayer(videoUrl) {
+            document.getElementById('loader').style.display = 'none';
+            
+            const playerBox = document.getElementById('playerBox');
+            const vidPlayer = document.getElementById('myVideo');
+            const dlBtn = document.getElementById('dlBtn');
 
-            const response = await fetch(proxyUrl);
-            const data = await response.json();
-
-            if (data.code === 0) {
-                showVideo(data.data.hdplay, "فيديو بدون حقوق (HD)");
-                document.getElementById('loader').style.display = 'none';
-            } else {
-                throw new Error("فشل تيك توك");
-            }
-        }
-
-        function showVideo(link, text) {
-            const div = document.createElement('div');
-            div.className = 'video-box';
-            div.innerHTML = `
-                <h3>✅ تم جلب الفيديو</h3>
-                <a href="${link}" class="dl-btn" target="_blank">${text} <i class="fas fa-download"></i></a>
-            `;
-            document.getElementById('resultArea').appendChild(div);
-            document.getElementById('resultArea').style.display = 'block';
+            // إعداد المشغل
+            vidPlayer.src = videoUrl;
+            
+            // إعداد زر التحميل
+            dlBtn.href = videoUrl;
+            
+            playerBox.style.display = 'block';
         }
     </script>
-
 </body>
 </html>
