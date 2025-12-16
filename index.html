@@ -2,208 +2,82 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saree3 | الصياد الشامل</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>محلل الفانتزي الذكي</title>
     <style>
-        :root { --primary: #0984e3; --secondary: #74b9ff; --bg: #dfe6e9; }
-        * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-        body { background: var(--bg); margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding-bottom: 50px; }
-        
-        .header {
-            width: 100%; padding: 40px 20px 80px; background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white; text-align: center; border-radius: 0 0 50px 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .logo { font-size: 2.2rem; font-weight: 900; margin-bottom: 10px; }
-        
-        .search-box {
-            background: white; width: 90%; max-width: 600px; padding: 10px; border-radius: 50px;
-            display: flex; gap: 10px; box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            transform: translateY(-50%);
-        }
-        input { flex: 1; border: none; outline: none; padding: 10px 20px; font-size: 1rem; }
-        button {
-            border: none; padding: 12px 30px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s;
-        }
-        .btn-paste { background: #f1f2f6; color: #333; }
-        .btn-dl { background: var(--primary); color: white; }
-
-        .result-card {
-            background: white; width: 90%; max-width: 600px; padding: 20px; border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: none; margin-top: -20px;
-        }
-        .video-info { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
-        .thumb { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; }
-        
-        .links { display: flex; flex-direction: column; gap: 10px; width: 100%; }
-        
-        .dl-btn {
-            text-decoration: none; background: #00b894; color: white; padding: 15px;
-            border-radius: 15px; font-size: 1rem; font-weight: bold; text-align: center;
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-            box-shadow: 0 4px 10px rgba(0, 184, 148, 0.2);
-        }
-        .dl-btn.audio { background: #fdcb6e; color: #d35400; }
-        
-        .loader { display: none; margin: 20px auto; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        
-        .status-badge {
-            background: #ffeaa7; color: #d35400; padding: 4px 12px; border-radius: 10px; font-size: 0.8rem;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #37003c; color: white; text-align: center; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; color: #333; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        h1 { color: #37003c; }
+        .player-box { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 20px; }
+        .input-group { flex: 1; background: #f0f0f0; padding: 15px; border-radius: 10px; }
+        input { width: 90%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; text-align: center; }
+        button { background-color: #00ff85; color: #37003c; border: none; padding: 15px 30px; font-size: 18px; font-weight: bold; border-radius: 50px; cursor: pointer; transition: 0.3s; }
+        button:hover { background-color: #00d66f; transform: scale(1.05); }
+        #result { margin-top: 20px; font-size: 20px; font-weight: bold; padding: 15px; border-radius: 10px; display: none; }
+        .winner { background-color: #d4edda; color: #155724; border: 2px solid #c3e6cb; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo"><i class="fas fa-search"></i> الصياد | Hunter</div>
-        <p>ضع رابط أي صفحة وسأجلب الفيديو لك</p>
-    </div>
+    <div class="container">
+        <h1>⚽ مقارنة لاعبين للفانتزي</h1>
+        <p>أدخل بيانات اللاعبين لمعرفة الخيار الأفضل إحصائياً</p>
 
-    <div class="search-box">
-        <button class="btn-paste" onclick="paste()">لصق</button>
-        <input type="text" id="url" placeholder="الرابط هنا...">
-        <button class="btn-dl" onclick="startHunter()">بحث</button>
-    </div>
+        <div class="player-box">
+            <div class="input-group">
+                <h3>اللاعب (1)</h3>
+                <input type="text" id="p1_name" placeholder="اسم اللاعب">
+                <input type="number" id="p1_price" placeholder="السعر (مثلاً 12.5)">
+                <input type="number" id="p1_points" placeholder="مجموع النقاط">
+                <input type="number" id="p1_form" placeholder="الفورمة (آخر 5 مباريات)">
+            </div>
 
-    <div class="loader" id="loader"></div>
-    <div id="error" style="color:#d63031; display:none; margin-top:20px; text-align:center; font-weight:bold;"></div>
-
-    <div class="result-card" id="result">
-        <div class="video-info">
-            <img id="thumb" class="thumb" src="">
-            <div style="flex:1">
-                <h4 id="title" style="margin:0 0 5px 0; font-size:0.9rem; line-height:1.4;"></h4>
-                <span id="sourceBadge" class="status-badge"></span>
+            <div class="input-group">
+                <h3>اللاعب (2)</h3>
+                <input type="text" id="p2_name" placeholder="اسم اللاعب">
+                <input type="number" id="p2_price" placeholder="السعر (مثلاً 8.0)">
+                <input type="number" id="p2_points" placeholder="مجموع النقاط">
+                <input type="number" id="p2_form" placeholder="الفورمة (آخر 5 مباريات)">
             </div>
         </div>
-        <div class="links" id="links"></div>
+
+        <button onclick="comparePlayers()">💡 حلل الآن</button>
+
+        <div id="result"></div>
     </div>
 
     <script>
-        const RAPID_KEY = '93247df140mshd2aea963379b373p191d29jsnefecb1c82e24';
+        function comparePlayers() {
+            // جلب البيانات
+            let p1 = {
+                name: document.getElementById('p1_name').value || "اللاعب 1",
+                price: parseFloat(document.getElementById('p1_price').value),
+                points: parseFloat(document.getElementById('p1_points').value),
+                form: parseFloat(document.getElementById('p1_form').value)
+            };
+            let p2 = {
+                name: document.getElementById('p2_name').value || "اللاعب 2",
+                price: parseFloat(document.getElementById('p2_price').value),
+                points: parseFloat(document.getElementById('p2_points').value),
+                form: parseFloat(document.getElementById('p2_form').value)
+            };
 
-        async function paste() {
-            try {
-                const text = await navigator.clipboard.readText();
-                document.getElementById('url').value = text;
-            } catch (e) { alert('الصق الرابط يدوياً'); }
-        }
+            // معادلة تقييم القيمة (Value) = (النقاط + الفورمة * 2) / السعر
+            let score1 = (p1.points + (p1.form * 2)) / p1.price;
+            let score2 = (p2.points + (p2.form * 2)) / p2.price;
 
-        async function startHunter() {
-            const url = document.getElementById('url').value.trim();
-            const loader = document.getElementById('loader');
-            const result = document.getElementById('result');
-            const error = document.getElementById('error');
+            let resultDiv = document.getElementById('result');
+            resultDiv.style.display = "block";
+            resultDiv.className = "winner";
 
-            if(!url) return;
-
-            loader.style.display = 'block';
-            result.style.display = 'none';
-            error.style.display = 'none';
-
-            try {
-                if (url.includes('tiktok.com')) {
-                    await fetchTikTok(url);
-                } else {
-                    // للمواقع الأخرى
-                    await fetchGenericSite(url);
-                }
-            } catch (err) {
-                loader.style.display = 'none';
-                error.innerText = "❌ لم يتم العثور على فيديو قابل للتحميل.";
-                error.style.display = 'block';
-            }
-        }
-
-        async function fetchTikTok(url) {
-            // نستخدم AllOrigins كجسر للاتصال
-            const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.tikwm.com/api/?url=' + url)}`;
-            const res = await fetch(apiUrl);
-            const data = await res.json();
-            
-            if(data.code === 0) {
-                // تجميع كل الروابط المتاحة لضمان ظهور زر واحد على الأقل
-                let links = [];
-                
-                // 1. رابط HD
-                if(data.data.hdplay) links.push({ url: data.data.hdplay, text: '📹 تحميل فيديو (HD)', type: 'video' });
-                // 2. رابط عادي (احتياطي)
-                else if(data.data.play) links.push({ url: data.data.play, text: '📹 تحميل فيديو (عادي)', type: 'video' });
-                // 3. رابط صوت
-                if(data.data.music) links.push({ url: data.data.music, text: '🎵 تحميل صوت (MP3)', type: 'audio' });
-
-                showData({
-                    title: data.data.title || 'فيديو تيك توك',
-                    thumb: data.data.cover,
-                    source: 'TikTok Server',
-                    links: links
-                });
+            if (score1 > score2) {
+                resultDiv.innerHTML = `✅ ننصحك باختيار: <strong>${p1.name}</strong><br><small>لأنه يقدم قيمة أفضل مقابل سعره حالياً</small>`;
+            } else if (score2 > score1) {
+                resultDiv.innerHTML = `✅ ننصحك باختيار: <strong>${p2.name}</strong><br><small>لأنه يقدم قيمة أفضل مقابل سعره حالياً</small>`;
             } else {
-                throw new Error("Failed");
+                resultDiv.innerHTML = "⚖️ اللاعبان متساويان في القيمة!";
             }
-        }
-
-        async function fetchGenericSite(targetUrl) {
-            // الصياد العام للمواقع الأخرى
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
-            const response = await fetch(proxyUrl);
-            const data = await response.json();
-            
-            if(!data.contents) throw new Error();
-
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(data.contents, 'text/html');
-            const foundLinks = new Set();
-
-            // البحث عن ملفات MP4 في الكود
-            const regex = /(https?:\/\/[^\s"']+\.mp4)/g;
-            const matches = data.contents.match(regex);
-            if(matches) matches.forEach(m => foundLinks.add(m));
-
-            // البحث في وسوم الفيديو
-            doc.querySelectorAll('video, source').forEach(v => {
-                if(v.src && v.src.startsWith('http')) foundLinks.add(v.src);
-            });
-
-            if(foundLinks.size > 0) {
-                const finalLinks = Array.from(foundLinks).map((link, i) => ({
-                    url: link, text: `📥 تحميل الملف ${i+1}`, type: 'video'
-                }));
-                
-                showData({
-                    title: doc.querySelector('title')?.innerText || 'فيديو مكتشف',
-                    thumb: 'https://cdn-icons-png.flaticon.com/512/2991/2991195.png',
-                    source: 'Web Scraper',
-                    links: finalLinks
-                });
-            } else {
-                throw new Error();
-            }
-        }
-
-        function showData(data) {
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('result').style.display = 'block';
-
-            document.getElementById('title').innerText = data.title;
-            document.getElementById('thumb').src = data.thumb;
-            document.getElementById('sourceBadge').innerText = data.source;
-
-            const linksDiv = document.getElementById('links');
-            linksDiv.innerHTML = '';
-
-            data.links.forEach(link => {
-                const cls = link.type === 'audio' ? 'dl-btn audio' : 'dl-btn';
-                linksDiv.innerHTML += `
-                    <a href="${link.url}" target="_blank" class="${cls}">
-                        ${link.text}
-                    </a>
-                `;
-            });
         }
     </script>
+
 </body>
 </html>
